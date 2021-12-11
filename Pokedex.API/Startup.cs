@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Pokedex.API.Clients;
+using Pokedex.API.Managers;
 
 namespace Pokedex.API
 {
@@ -27,7 +28,8 @@ namespace Pokedex.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            //services.AddScoped<IPokemonClient>();
+            services.AddScoped<IPokemonClient, ServiceStackClient>();
+            services.AddScoped<PokedexManager>();
 
             // Register the Swagger services
             services.AddSwaggerDocument(config =>

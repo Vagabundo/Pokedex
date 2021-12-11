@@ -28,7 +28,7 @@ namespace Pokedex.API.Test.Maganers
         }
 
         [Test]
-        public void GetPokemonFromId_CallsClientGetInfo1()
+        public void GetPokemonFromId_ReturnsPokemon()
         {
             Pokemon fakePokemon = new Pokemon {
                 Name = "Test",

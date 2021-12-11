@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Pokedex.API.Data;
+using Pokedex.API.Managers;
 
 namespace Pokedex.API.Controllers
 {
@@ -11,29 +13,17 @@ namespace Pokedex.API.Controllers
     [Route("[controller]")]
     public class PokedexController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
+        private PokedexManager _manager;
 
-        private readonly ILogger<PokedexController> _logger;
-
-        public PokedexController(ILogger<PokedexController> logger)
+        public PokedexController(PokedexManager manager)
         {
-            _logger = logger;
+            _manager = manager;
         }
 
-        [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        [HttpGet("{id}")]
+        public Pokemon GetPokemon(int id)
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
+            return _manager.GetPokemonFromId(id);
         }
     }
 }
