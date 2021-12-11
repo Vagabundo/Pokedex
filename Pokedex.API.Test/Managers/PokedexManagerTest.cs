@@ -6,6 +6,7 @@ using Pokedex.API.Managers;
 
 namespace Pokedex.API.Test.Maganers
 {
+    [TestFixture]
     public class PokedexManagerTest
     {
         private PokedexManager manager;
