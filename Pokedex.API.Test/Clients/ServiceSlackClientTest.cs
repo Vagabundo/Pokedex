@@ -1,4 +1,3 @@
-using Moq;
 using NUnit.Framework;
 using Pokedex.API.Data;
 using Pokedex.API.Clients;
@@ -17,9 +16,8 @@ namespace Pokedex.API.Test.Clients
         "\"language\":{\"name\":\"en\",\"url\":\"https:\\/\\/pokeapi.co\\/api\\/v2\\/language\\/9\\/\"},\"version\":{\"name\":\"red\",\"url\":\"https:\\/\\/pokeapi.co\\/api\\/v2\\/version\\/1\\/\"}},"+
         "{\"flavor_text\":\"It was created by\\na scientist after\\nyears of horrific\\fgene splicing and\\nDNA engineering\\nexperiments.\","+
         "\"language\":{\"name\":\"en\",\"url\":\"https:\\/\\/pokeapi.co\\/api\\/v2\\/language\\/9\\/\"},\"version\":{\"name\":\"blue\",\"url\":\"https:\\/\\/pokeapi.co\\/api\\/v2\\/version\\/2\\/\"}}],"+
-        "{\"habitat\":{\"name\":\"rare\",\"url\":\"https:\\/\\/pokeapi.co\\/api\\/v2\\/pokemon-habitat\\/5\\/\"},\"has_gender_differences\":false,\"hatch_counter\":120,\"id\":150,\"is_baby\":false,"+
-        "\"is_legendary\":true,\"is_mythical\":false,\"name\":\"mewtwo\"}}";
-        private const string exampleUrl = "http://test.test";
+        "\"habitat\":{\"name\":\"rare\",\"url\":\"https:\\/\\/pokeapi.co\\/api\\/v2\\/pokemon-habitat\\/5\\/\"},\"has_gender_differences\":false,\"hatch_counter\":120,\"id\":150,\"is_baby\":false,"+
+        "\"is_legendary\":true,\"is_mythical\":false,\"name\":\"mewtwo\"}";
 
         [SetUp]
         public void Setup()
@@ -39,8 +37,7 @@ namespace Pokedex.API.Test.Clients
 
             using (new HttpResultsFilter{ StringResult = json })
             {
-                Assert.That(exampleUrl.GetJsonFromUrl(), Is.EqualTo(json));
-                Assert.That(client.GetInfo(150), Is.EqualTo(mewtwo));
+                Assert.That(client.GetInfo(150) == mewtwo, "GetInfo does not return the expected object");
             }
         }
     }   
