@@ -13,9 +13,19 @@ namespace Pokedex.API.Managers
             _client = pokemonClient;
         }
 
+        public async Task<Pokemon> GetPokemonFromNameAsync(string name)
+        {
+            return await Task.FromResult(new Pokemon {
+                Name = "Failemon",
+                Description = "Dummy pokemon for a failing test",
+                Habitat = "Failand",
+                IsLegendary = false
+            });
+        }
+
         public async Task<Pokemon> GetPokemonFromIdAsync(int id)
         {
-            string response = await _client.GetInfoAsync(id);
+            string response = await _client.GetPokemonInfoFromIdAsync(id);
             dynamic json =  DynamicJson.Deserialize(response);
 
             return new Pokemon {
@@ -34,6 +44,11 @@ namespace Pokedex.API.Managers
             poke.Description = GetPokemonTranslatedDescription(json);
 
             return poke;
+        }
+
+        private async Task<int> GetPokemonIdFromNameAsync(string name)
+        {
+            return await Task.FromResult(1);
         }
 
         // In production, the following functions would have exceptions handling depending on the requirements

@@ -13,6 +13,8 @@ namespace Pokedex.API.Test.Data
         public static string FakeTranslationJson = 
         "{\"success\":{\"total\":1},\"contents\":{\"translated\":\"A test pokemon description, this is.\",\"text\":\"This is a test pokemon description.\",\"translation\":\"yoda\"}}";
 
+        public static string FakePokemonFromNameJson = "{\"height\": 16, \"id\": 1}";
+
         public static Pokemon FakePokemon = new Pokemon {
                 Name = "testemon",
                 Description = "This is a test pokemon description.",
