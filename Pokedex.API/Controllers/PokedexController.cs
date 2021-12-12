@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Pokedex.API.Data;
 using Pokedex.API.Managers;
@@ -16,9 +17,9 @@ namespace Pokedex.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public Pokemon GetPokemon(int id)
+        public Task<Pokemon> GetPokemon(int id)
         {
-            return _manager.GetPokemonFromId(id);
+            return _manager.GetPokemonFromIdAsync(id);
         }
     }
 }

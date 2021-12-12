@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Pokedex.API.Data;
 using ServiceStack;
@@ -14,45 +15,16 @@ namespace Pokedex.API.Clients
             _config = config;
         }
 
-        public Pokemon GetInfo(int id)
+        public Task<string> GetInfoAsync(int id)
         {
             var url = _config.GetValue<string>("PokeApiUrl");
-            var res = (url+id).GetJsonFromUrlAsync(webReq =>
-                    {
-                        webReq.UserAgent = _config.GetValue<string>("UserAgent");
-                    });
-            
-            var json = DynamicJson.Deserialize(res.Result);
-
-            return new Pokemon {
-                Name = GetPokemonName(json),
-                Description = GetPokemonDescription(json),
-                Habitat = GetPokemonHabitat(json),
-                IsLegendary = GetPokemonIsLegendary(json)
-            };
+            return (url+id).GetJsonFromUrlAsync(webReq =>
+                {
+                    webReq.UserAgent = _config.GetValue<string>("UserAgent");
+                });
         }
 
-        private string GetPokemonName(dynamic json)
-        {
-            return json.name;
-        }
-
-        private string GetPokemonDescription(dynamic json)
-        {
-            return Regex.Replace(json.flavor_text_entries[0].flavor_text, "\n|\r|\f|\b|\t", " ");
-        }
-
-        private string GetPokemonHabitat(dynamic json)
-        {
-            return json.habitat.name;
-        }
-
-        private bool GetPokemonIsLegendary(dynamic json)
-        {
-            return json.is_legendary == "true";
-        }
-
-        public string GetTranslatedText(string text)
+        public Task<string> GetTranslatedTextAsync(string text)
         {
             throw new System.NotImplementedException();
         }

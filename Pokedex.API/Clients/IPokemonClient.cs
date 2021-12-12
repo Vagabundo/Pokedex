@@ -1,10 +1,10 @@
-using Pokedex.API.Data;
+using System.Threading.Tasks;
 
 namespace Pokedex.API.Clients
 {
     public interface IPokemonClient
     {
-        Pokemon GetInfo(int id);
-        string GetTranslatedText(string text);
+        Task<string> GetInfoAsync(int id);
+        Task<string> GetTranslatedTextAsync(string text);
     }
 }
