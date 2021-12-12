@@ -1,3 +1,4 @@
+using System;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Pokedex.API.Clients;
@@ -15,12 +16,11 @@ namespace Pokedex.API.Managers
 
         public async Task<Pokemon> GetPokemonFromNameAsync(string name)
         {
-            return await Task.FromResult(new Pokemon {
-                Name = "Failemon",
-                Description = "Dummy pokemon for a failing test",
-                Habitat = "Failand",
-                IsLegendary = false
-            });
+            string response = await _client.GetPokemonInfoFromNameAsync(name);
+            dynamic json =  DynamicJson.Deserialize(response);
+            int id = 0;
+
+            return Int32.TryParse(json?.id, out id) ? await GetPokemonFromIdAsync(id) : null;
         }
 
         public async Task<Pokemon> GetPokemonFromIdAsync(int id)
@@ -41,14 +41,10 @@ namespace Pokedex.API.Managers
             Pokemon poke = await GetPokemonFromIdAsync(id);
             string response = await _client.GetTranslatedTextAsync(poke.Description);
             dynamic json = DynamicJson.Deserialize(response);
+
             poke.Description = GetPokemonTranslatedDescription(json);
 
             return poke;
-        }
-
-        private async Task<int> GetPokemonIdFromNameAsync(string name)
-        {
-            return await Task.FromResult(1);
         }
 
         // In production, the following functions would have exceptions handling depending on the requirements
@@ -64,7 +60,8 @@ namespace Pokedex.API.Managers
 
         private string GetPokemonTranslatedDescription(dynamic json)
         {
-            return json?.success?.total == "0" ? null : json?.contents?.translated;
+            // The responses from translations API sometimes include double spaces after comma in the strings, so I have to filter it 
+            return json?.success?.total == "0" ? null : Regex.Replace(json?.contents?.translated, "  ", " ");
         }
 
         private string GetPokemonHabitat(dynamic json)
