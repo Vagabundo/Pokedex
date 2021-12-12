@@ -1,9 +1,6 @@
-using System;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Pokedex.API.Clients;
 using Pokedex.API.Data;
-using ServiceStack;
 
 namespace Pokedex.API.Managers
 {
@@ -17,61 +14,30 @@ namespace Pokedex.API.Managers
         public async Task<Pokemon> GetPokemonFromNameAsync(string name)
         {
             string response = await _client.GetPokemonInfoFromNameAsync(name);
-            dynamic json =  DynamicJson.Deserialize(response);
-            int id = 0;
 
-            return Int32.TryParse(json?.id, out id) ? await GetPokemonFromIdAsync(id) : null;
+            return await GetPokemonFromIdAsync(JsonHelper.GetPokemonId(response));
         }
 
         public async Task<Pokemon> GetPokemonFromIdAsync(int id)
         {
             string response = await _client.GetPokemonInfoFromIdAsync(id);
-            dynamic json =  DynamicJson.Deserialize(response);
 
             return new Pokemon {
-                Name = GetPokemonName(json),
-                Description = GetPokemonDescription(json),
-                Habitat = GetPokemonHabitat(json),
-                IsLegendary = GetPokemonIsLegendary(json)
+                Name = JsonHelper.GetPokemonName(response),
+                Description = JsonHelper.GetPokemonDescription(response),
+                Habitat = JsonHelper.GetPokemonHabitat(response),
+                IsLegendary = JsonHelper.GetPokemonIsLegendary(response)
             };
         }
 
-        public async Task<Pokemon> GetTranslatedPokemonFromIdAsync(int id)
+        public async Task<Pokemon> GetTranslatedPokemonFromNameAsync(string name)
         {
-            Pokemon poke = await GetPokemonFromIdAsync(id);
+            Pokemon poke = await GetPokemonFromNameAsync(name);
             string response = await _client.GetTranslatedTextAsync(poke.Description);
-            dynamic json = DynamicJson.Deserialize(response);
 
-            poke.Description = GetPokemonTranslatedDescription(json);
+            poke.Description = JsonHelper.GetPokemonTranslatedDescription(response);
 
             return poke;
-        }
-
-        // In production, the following functions would have exceptions handling depending on the requirements
-        private string GetPokemonName(dynamic json)
-        {
-            return json?.name;
-        }
-
-        private string GetPokemonDescription(dynamic json)
-        {
-            return Regex.Replace(json?.flavor_text_entries[0]?.flavor_text, "\n|\r|\f|\b|\t", " ");
-        }
-
-        private string GetPokemonTranslatedDescription(dynamic json)
-        {
-            // The responses from translations API sometimes include double spaces after comma in the strings, so I have to filter it 
-            return json?.success?.total == "0" ? null : Regex.Replace(json?.contents?.translated, "  ", " ");
-        }
-
-        private string GetPokemonHabitat(dynamic json)
-        {
-            return json?.habitat?.name;
-        }
-
-        private bool GetPokemonIsLegendary(dynamic json)
-        {
-            return json?.is_legendary == "true";
         }
     }
 }

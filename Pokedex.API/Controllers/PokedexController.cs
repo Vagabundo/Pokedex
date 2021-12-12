@@ -16,16 +16,16 @@ namespace Pokedex.API.Controllers
             _manager = manager;
         }
 
-        [HttpGet("{id}")]
-        public Task<Pokemon> GetPokemon(int id)
+        [HttpGet("{name}")]
+        public Task<Pokemon> GetPokemon(string name)
         {
-            return _manager.GetPokemonFromIdAsync(id);
+            return _manager.GetPokemonFromNameAsync(name);
         }
 
-        [HttpGet("translated/{id}")]
-        public Task<Pokemon> GetTranslatedPokemon(int id)
+        [HttpGet("translated/{name}")]
+        public Task<Pokemon> GetTranslatedPokemon(string name)
         {
-            return _manager.GetTranslatedPokemonFromIdAsync(id);
+            return _manager.GetTranslatedPokemonFromNameAsync(name);
         }
     }
 }

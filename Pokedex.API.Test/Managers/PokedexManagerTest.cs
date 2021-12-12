@@ -69,14 +69,14 @@ namespace Pokedex.API.Test.Maganers
         }
 
         [Test]
-        public void GetTranslatedPokemonFromIdAsync_CallsClientGetPokemonInfoFromIdAsyncAndGetTranslatedTextAsync()
+        public void GetTranslatedPokemonFromNameAsync_CallsClientGetPokemonInfoFromNameAsyncAndGetTranslatedTextAsync()
         {
-            clientMock.Setup(cm => cm.GetPokemonInfoFromIdAsync(It.IsAny<int>())).Returns(Task.FromResult(FakePokemonJson));
+            clientMock.Setup(cm => cm.GetPokemonInfoFromNameAsync(It.IsAny<string>())).Returns(Task.FromResult(FakePokemonFromNameJson));
             clientMock.Setup(cm => cm.GetTranslatedTextAsync(It.IsAny<string>()));
 
-            manager.GetTranslatedPokemonFromIdAsync(1);
+            manager.GetTranslatedPokemonFromNameAsync("test");
 
-            clientMock.Verify(cm => cm.GetPokemonInfoFromIdAsync(1), Times.Once);
+            clientMock.Verify(cm => cm.GetPokemonInfoFromNameAsync("test"), Times.Once);
             clientMock.Verify(cm => cm.GetTranslatedTextAsync(It.IsAny<string>()), Times.Once);
         }
 
@@ -86,10 +86,10 @@ namespace Pokedex.API.Test.Maganers
             Pokemon expectedPokemon = FakePokemon;
             expectedPokemon.Description = FakeTranslation;
 
-            clientMock.Setup(cm => cm.GetPokemonInfoFromIdAsync(It.IsAny<int>())).Returns(Task.FromResult(FakePokemonJson));
+            clientMock.Setup(cm => cm.GetPokemonInfoFromNameAsync(It.IsAny<string>())).Returns(Task.FromResult(FakePokemonFromNameJson));
             clientMock.Setup(cm => cm.GetTranslatedTextAsync(It.IsAny<string>())).Returns(Task.FromResult(FakeTranslationJson));
 
-            Pokemon res = manager.GetTranslatedPokemonFromIdAsync(1).Result;
+            Pokemon res = manager.GetTranslatedPokemonFromNameAsync("test").Result;
 
             Assert.AreEqual(expectedPokemon, res);
         }
