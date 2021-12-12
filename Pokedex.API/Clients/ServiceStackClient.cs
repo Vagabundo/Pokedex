@@ -1,4 +1,5 @@
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Configuration;
 using Pokedex.API.Data;
 using ServiceStack;
 
@@ -6,13 +7,19 @@ namespace Pokedex.API.Clients
 {
     public class ServiceStackClient : IPokemonClient
     {
-        private string url = "https://pokeapi.co/api/v2/pokemon-species/";
-        private string userAgent = "VagaPokedexApi/1.0";
+        private readonly IConfiguration _config;
+
+        public ServiceStackClient(IConfiguration config)
+        {
+            _config = config;
+        }
+
         public Pokemon GetInfo(int id)
         {
+            var url = _config.GetValue<string>("PokeApiUrl");
             var res = (url+id).GetJsonFromUrlAsync(webReq =>
                     {
-                        webReq.UserAgent = userAgent;
+                        webReq.UserAgent = _config.GetValue<string>("UserAgent");
                     });
             
             var json = DynamicJson.Deserialize(res.Result);
