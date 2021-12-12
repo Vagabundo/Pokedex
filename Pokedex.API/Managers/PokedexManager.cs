@@ -15,7 +15,7 @@ namespace Pokedex.API.Managers
 
         public async Task<Pokemon> GetPokemonFromIdAsync(int id)
         {
-            var response = await _client.GetInfoAsync(id);
+            string response = await _client.GetInfoAsync(id);
             dynamic json =  DynamicJson.Deserialize(response);
 
             return new Pokemon {
@@ -29,29 +29,37 @@ namespace Pokedex.API.Managers
         public async Task<Pokemon> GetTranslatedPokemonFromIdAsync(int id)
         {
             Pokemon poke = await GetPokemonFromIdAsync(id);
-            poke.Description = await _client.GetTranslatedTextAsync(poke.Description);
+            string response = await _client.GetTranslatedTextAsync(poke.Description);
+            dynamic json = DynamicJson.Deserialize(response);
+            poke.Description = GetPokemonTranslatedDescription(json);
 
             return poke;
         }
 
+        // In production, the following functions would have exceptions handling depending on the requirements
         private string GetPokemonName(dynamic json)
         {
-            return json.name;
+            return json?.name;
         }
 
         private string GetPokemonDescription(dynamic json)
         {
-            return Regex.Replace(json.flavor_text_entries[0].flavor_text, "\n|\r|\f|\b|\t", " ");
+            return Regex.Replace(json?.flavor_text_entries[0]?.flavor_text, "\n|\r|\f|\b|\t", " ");
+        }
+
+        private string GetPokemonTranslatedDescription(dynamic json)
+        {
+            return json?.success?.total == "0" ? null : json?.contents?.translated;
         }
 
         private string GetPokemonHabitat(dynamic json)
         {
-            return json.habitat.name;
+            return json?.habitat?.name;
         }
 
         private bool GetPokemonIsLegendary(dynamic json)
         {
-            return json.is_legendary == "true";
+            return json?.is_legendary == "true";
         }
     }
 }

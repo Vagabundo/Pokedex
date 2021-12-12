@@ -1,10 +1,9 @@
 using NUnit.Framework;
-using Pokedex.API.Data;
 using Pokedex.API.Clients;
 using ServiceStack;
-using Pokedex.API.Test.Data;
 using Moq;
 using Microsoft.Extensions.Configuration;
+using static Pokedex.API.Test.Data.Constants;
 
 namespace Pokedex.API.Test.Clients
 {
@@ -12,29 +11,46 @@ namespace Pokedex.API.Test.Clients
     public class ServiceStackClientTest
     {
         private ServiceStackClient client;
+        private Mock<IConfigurationSection> mockPokemonUrl;
+        private Mock<IConfigurationSection> mockAgent;
+        private Mock<IConfigurationSection> mockTranslationUrl;
+        private Mock<IConfiguration> configuration;
 
         [SetUp]
         public void Setup()
         {
-            Mock<IConfigurationSection> mockUrl = new Mock<IConfigurationSection>();
-            Mock<IConfigurationSection> mockAgent = new Mock<IConfigurationSection>();
-            Mock<IConfiguration> configuration = new Mock<IConfiguration>();
+            mockAgent = new Mock<IConfigurationSection>();
+            configuration = new Mock<IConfiguration>();
 
-            mockUrl.Setup(x=>x.Value).Returns("http://test.test");
             mockAgent.Setup(x=>x.Value).Returns("test-agent");
-
-            configuration.Setup(c => c.GetSection("PokeApiUrl")).Returns(mockUrl.Object);
             configuration.Setup(c => c.GetSection("UserAgent")).Returns(mockAgent.Object);
             
             client = new ServiceStackClient(configuration.Object);
         }
 
         [Test]
-        public void GetInfo_ReturnsExpectedPokemonObject()
+        public void GetInfoAsync_UsesServiceStackHttpClientAndReturnsExpectedJson()
         {
-            using (new HttpResultsFilter{ StringResult = Constants.FakeExpectedJson })
+            mockPokemonUrl = new Mock<IConfigurationSection>();
+            mockPokemonUrl.Setup(x=>x.Value).Returns("http://test.test");
+            configuration.Setup(c => c.GetSection("PokeApiUrl")).Returns(mockPokemonUrl.Object);
+
+            using (new HttpResultsFilter{ StringResult = FakePokemonJson })
             {
-                Assert.That(client.GetInfoAsync(150).Result == Constants.FakeExpectedJson);
+                Assert.That(client.GetInfoAsync(1).Result == FakePokemonJson);
+            }
+        }
+
+        [Test]
+        public void GetTranslatedTextAsync_UsesServiceStackHttpClientAndReturnsExpectedJson()
+        {
+            mockTranslationUrl = new Mock<IConfigurationSection>();
+            mockTranslationUrl.Setup(x=>x.Value).Returns("http://test.test");
+            configuration.Setup(c => c.GetSection("YodaTranslationApiUrl")).Returns(mockTranslationUrl.Object);
+
+            using (new HttpResultsFilter{ StringResult = FakeTranslationJson })
+            {
+                Assert.That(client.GetTranslatedTextAsync("testing http client").Result == FakeTranslationJson);
             }
         }
     }   

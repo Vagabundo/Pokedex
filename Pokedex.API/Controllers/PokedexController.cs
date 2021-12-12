@@ -21,5 +21,11 @@ namespace Pokedex.API.Controllers
         {
             return _manager.GetPokemonFromIdAsync(id);
         }
+
+        [HttpGet("translated/{id}")]
+        public Task<Pokemon> GetTranslatedPokemon(int id)
+        {
+            return _manager.GetTranslatedPokemonFromIdAsync(id);
+        }
     }
 }

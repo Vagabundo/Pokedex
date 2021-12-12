@@ -26,7 +26,11 @@ namespace Pokedex.API.Clients
 
         public Task<string> GetTranslatedTextAsync(string text)
         {
-            throw new System.NotImplementedException();
+            var url = _config.GetValue<string>("YodaTranslationApiUrl");
+            return (url + "?text=" + text).GetJsonFromUrlAsync(webReq =>
+                {
+                    webReq.UserAgent = _config.GetValue<string>("UserAgent");
+                });
         }
     }
 }
