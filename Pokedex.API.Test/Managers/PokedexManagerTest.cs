@@ -32,15 +32,35 @@ namespace Pokedex.API.Test.Maganers
         public void GetPokemonFromId_ReturnsPokemon()
         {
             Pokemon fakePokemon = new Pokemon {
-                Name = "Test",
-                Description = "tesst",
-                Habitat = "test",
+                Name = "Testemon",
+                Description = "This is a test pokemon",
+                Habitat = "testiland",
                 IsLegendary = false
             };
 
             clientMock.Setup(cm => cm.GetInfo(It.IsAny<int>())).Returns(fakePokemon);
 
-            Assert.AreEqual(fakePokemon, manager.GetPokemonFromId(2));
+            Assert.AreEqual(fakePokemon, manager.GetPokemonFromId(1));
+        }
+
+        [Test]
+        public void GetTranslatedPokemonFromId_ReturnsTranslatedPokemon()
+        {
+            Pokemon fakePokemon = new Pokemon {
+                Name = "Testemon",
+                Description = "This is a test pokemon",
+                Habitat = "testiland",
+                IsLegendary = false
+            };
+            string fakeTranslation = "A test pokemon, this is";
+            clientMock.Setup(cm => cm.GetInfo(It.IsAny<int>())).Returns(fakePokemon);
+
+            Pokemon res = manager.GetTranslatedPokemonFromId(1);
+
+            Assert.AreEqual(fakePokemon.Name, res.Name);
+            Assert.AreEqual(fakeTranslation, res.Description);
+            Assert.AreEqual(fakePokemon.Habitat, res.Habitat);
+            Assert.AreEqual(fakePokemon.IsLegendary, res.IsLegendary);
         }
     }
 }

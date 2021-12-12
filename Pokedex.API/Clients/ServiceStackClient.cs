@@ -51,5 +51,10 @@ namespace Pokedex.API.Clients
         {
             return json.is_legendary == "true";
         }
+
+        public string GetTranslatedText(string text)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

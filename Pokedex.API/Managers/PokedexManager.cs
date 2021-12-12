@@ -14,5 +14,13 @@ namespace Pokedex.API.Managers
         {
             return _client.GetInfo(id);
         }
+
+        public Pokemon GetTranslatedPokemonFromId(int id)
+        {
+            Pokemon poke = _client.GetInfo(id);
+            poke.Description = _client.GetTranslatedText(poke.Description);
+            
+            return poke;
+        }
     }
 }

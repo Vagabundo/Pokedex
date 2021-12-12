@@ -5,5 +5,6 @@ namespace Pokedex.API.Clients
     public interface IPokemonClient
     {
         Pokemon GetInfo(int id);
+        string GetTranslatedText(string text);
     }
 }
