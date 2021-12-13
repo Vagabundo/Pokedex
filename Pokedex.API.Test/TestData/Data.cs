@@ -27,5 +27,9 @@ namespace Pokedex.API.Test.Data
         public static string TranslationErrorExample = "{ \"error\": { \"code\": 429, \"message\": \"Too Many Requests: Rate limit of 5 requests per hour exceeded. Please wait for 44 minutes and 14 seconds.\" } }";
         
         public static string FakeTranslation = "A test pokemon description, this is.";
+
+        public static string FakeFailedTranslationResponse = "{\n    \"error\": {\n        \"code\": 429,\n        \"message\": \"Too Many Requests: Rate limit of 5 requests per hour exceeded. Please wait for 56 minutes and 56 seconds.\"\n    }\n}";
+
+        public static string InternalErrorMessage = "Internal Error";
     }
 }

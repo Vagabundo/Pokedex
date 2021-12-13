@@ -11,7 +11,7 @@ namespace Pokedex.API.Data
             Body = data;
         }
 
-        public Response (string message, int code)
+        public Response (int code, string message)
         {
             ErrorMessage = message;
             ErrorCode = code;
