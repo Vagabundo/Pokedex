@@ -17,15 +17,25 @@ namespace Pokedex.API.Controllers
         }
 
         [HttpGet("{name}")]
-        public Task<Pokemon> GetPokemon(string name)
+        public async Task<ActionResult<Pokemon>> GetPokemon(string name)
         {
-            return _manager.GetPokemonFromNameAsync(name);
+            var response = await _manager.GetPokemonFromNameAsync(name);
+
+            if (response.ErrorMessage == null)
+                return Ok(response.Body);
+
+            return StatusCode(response.ErrorCode, response.ErrorMessage);
         }
 
         [HttpGet("translated/{name}")]
-        public Task<Pokemon> GetTranslatedPokemon(string name)
+        public async Task<ActionResult<Pokemon>> GetTranslatedPokemon(string name)
         {
-            return _manager.GetTranslatedPokemonFromNameAsync(name);
+            var response = await _manager.GetTranslatedPokemonFromNameAsync(name);
+
+            if (response.ErrorMessage == null)
+                return Ok(response.Body);
+
+            return StatusCode(response.ErrorCode, response.ErrorMessage);
         }
     }
 }
