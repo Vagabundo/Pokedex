@@ -39,7 +39,7 @@ namespace Pokedex.API.Test.Clients
         {
             using (new HttpResultsFilter{ StringResult = FakePokemonJson })
             {
-                Assert.That(client.GetPokemonInfoFromIdAsync(1).Result == FakePokemonJson);
+                Assert.That(client.GetPokemonInfoFromIdAsync(PokemonId).Result == FakePokemonJson);
             }
         }
 
