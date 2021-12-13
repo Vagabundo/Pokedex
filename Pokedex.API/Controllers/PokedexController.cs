@@ -7,11 +7,11 @@ namespace Pokedex.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class PokedexController : ControllerBase
+    public class PokemonController : ControllerBase
     {
-        private PokedexManager _manager;
+        private PokemonManager _manager;
 
-        public PokedexController(PokedexManager manager)
+        public PokemonController(PokemonManager manager)
         {
             _manager = manager;
         }

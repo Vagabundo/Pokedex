@@ -21,9 +21,8 @@ namespace Pokedex.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.Configure<string>(Configuration.GetSection("PokeApiUrl"));
             services.AddScoped<IPokemonClient, ServiceStackClient>();
-            services.AddScoped<PokedexManager>();
+            services.AddScoped<PokemonManager>();
 
             // Register the Swagger services
             services.AddSwaggerDocument(config =>

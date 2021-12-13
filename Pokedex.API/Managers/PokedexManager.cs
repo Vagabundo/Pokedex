@@ -7,11 +7,11 @@ using ServiceStack;
 
 namespace Pokedex.API.Managers
 {
-    public class PokedexManager {
+    public class PokemonManager {
         private IPokemonClient _client;
-        private readonly ILogger<PokedexManager> _logger;
+        private readonly ILogger<PokemonManager> _logger;
 
-        public PokedexManager(IPokemonClient pokemonClient, ILogger<PokedexManager> logger)
+        public PokemonManager(IPokemonClient pokemonClient, ILogger<PokemonManager> logger)
         {
             _client = pokemonClient;
             _logger = logger;

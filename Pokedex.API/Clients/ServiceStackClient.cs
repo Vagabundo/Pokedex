@@ -1,7 +1,5 @@
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using Pokedex.API.Data;
 using ServiceStack;
 
 namespace Pokedex.API.Clients
@@ -14,33 +12,33 @@ namespace Pokedex.API.Clients
         public ServiceStackClient(IConfiguration config)
         {
             _config = config;
-            apiBaseUrl = _config.GetValue<string>("PokeApiBaseUrl");
+            apiBaseUrl = _config.GetValue<string>("HttpConfig:PokeApiBaseUrl");
         }
 
         public Task<string> GetPokemonInfoFromNameAsync(string name)
         {
-            var url = apiBaseUrl + _config.GetValue<string>("PokeApiNameUrl");
+            var url = apiBaseUrl + _config.GetValue<string>("HttpConfig:PokeApiNameUrl");
             return (url+name).GetJsonFromUrlAsync(webReq =>
                 {
-                    webReq.UserAgent = _config.GetValue<string>("UserAgent");
+                    webReq.UserAgent = _config.GetValue<string>("HttpConfig:UserAgent");
                 });
         }
 
         public Task<string> GetPokemonInfoFromIdAsync(int id)
         {
-            var url = apiBaseUrl + _config.GetValue<string>("PokeApiIdUrl");
+            var url = apiBaseUrl + _config.GetValue<string>("HttpConfig:PokeApiIdUrl");
             return (url+id).GetJsonFromUrlAsync(webReq =>
                 {
-                    webReq.UserAgent = _config.GetValue<string>("UserAgent");
+                    webReq.UserAgent = _config.GetValue<string>("HttpConfig:UserAgent");
                 });
         }
 
         public Task<string> GetTranslatedTextAsync(string text)
         {
-            var url = _config.GetValue<string>("YodaTranslationApiUrl");
+            var url = _config.GetValue<string>("HttpConfig:YodaTranslationApiUrl");
             return (url+text).GetJsonFromUrlAsync(webReq =>
                 {
-                    webReq.UserAgent = _config.GetValue<string>("UserAgent");
+                    webReq.UserAgent = _config.GetValue<string>("HttpConfig:UserAgent");
                 });
         }
     }

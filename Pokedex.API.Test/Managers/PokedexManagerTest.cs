@@ -11,17 +11,17 @@ using System;
 namespace Pokedex.API.Test.Maganers
 {
     [TestFixture]
-    public class PokedexManagerTest
+    public class PokemonManagerTest
     {
-        private PokedexManager manager;
+        private PokemonManager manager;
         private Mock<IPokemonClient> clientMock = new Mock<IPokemonClient>();
-        private Mock<ILogger<PokedexManager>> logger = new Mock<ILogger<PokedexManager>>();
+        private Mock<ILogger<PokemonManager>> logger = new Mock<ILogger<PokemonManager>>();
 
         [SetUp]
         public void Setup()
         {
             clientMock.Invocations.Clear();
-            manager = new PokedexManager(clientMock.Object, logger.Object);
+            manager = new PokemonManager(clientMock.Object, logger.Object);
         }
 
         [Test]
