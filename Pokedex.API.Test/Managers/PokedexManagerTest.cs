@@ -36,12 +36,13 @@ namespace Pokedex.API.Test.Maganers
         [Test]
         public void GetPokemonFromNameAsync_ReturnsPokemon()
         {
+            Pokemon result;
             clientMock.Setup(cm => cm.GetPokemonInfoFromNameAsync(It.IsAny<string>())).Returns(Task.FromResult(FakePokemonFromNameJson));
             clientMock.Setup(cm => cm.GetPokemonInfoFromIdAsync(It.IsAny<int>())).Returns(Task.FromResult(FakePokemonJson));
             
-            var res = manager.GetPokemonFromNameAsync(FakePokemon.Name).Result;
+            result = manager.GetPokemonFromNameAsync(FakePokemon.Name).Result.Body;
 
-            Assert.AreEqual(FakePokemon, res);
+            Assert.AreEqual(FakePokemon, result);
         }
 
         [Test]
@@ -57,10 +58,12 @@ namespace Pokedex.API.Test.Maganers
         [Test]
         public void GetPokemonFromIdAsync_ReturnsPokemon()
         {
+            Pokemon result;
             clientMock.Setup(cm => cm.GetPokemonInfoFromIdAsync(It.IsAny<int>())).Returns(Task.FromResult(FakePokemonJson));
-            var res = manager.GetPokemonFromIdAsync(PokemonId).Result;
 
-            Assert.AreEqual(FakePokemon, res);
+            result = manager.GetPokemonFromIdAsync(PokemonId).Result.Body;
+
+            Assert.AreEqual(FakePokemon, result);
         }
 
         [Test]
@@ -79,6 +82,7 @@ namespace Pokedex.API.Test.Maganers
         [Test]
         public void GetTranslatedPokemonFromNameAsync_ReturnsTranslatedPokemon()
         {
+            Pokemon result;
             Pokemon expectedPokemon = FakePokemon;
             expectedPokemon.Description = FakeTranslation;
 
@@ -86,9 +90,9 @@ namespace Pokedex.API.Test.Maganers
             clientMock.Setup(cm => cm.GetPokemonInfoFromIdAsync(It.IsAny<int>())).Returns(Task.FromResult(FakePokemonJson));
             clientMock.Setup(cm => cm.GetTranslatedTextAsync(It.IsAny<string>())).Returns(Task.FromResult(FakeTranslationJson));
 
-            Pokemon res = manager.GetTranslatedPokemonFromNameAsync(FakePokemon.Name).Result;
+            result = manager.GetTranslatedPokemonFromNameAsync(FakePokemon.Name).Result.Body;
 
-            Assert.AreEqual(expectedPokemon, res);
+            Assert.AreEqual(expectedPokemon, result);
         }
     }
 }
