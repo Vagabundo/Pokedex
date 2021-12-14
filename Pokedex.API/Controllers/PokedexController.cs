@@ -16,6 +16,15 @@ namespace Pokedex.API.Controllers
             _manager = manager;
         }
 
+        /// <summary>
+        /// Returns a specific pokemon information by name
+        /// </summary>
+        /// <response code="200">Pokemon information returned</response>
+        /// <response code="404">Pokemon not found</response>
+        /// <response code="500">Can't return Pokemon information right now</response>
+        [ProducesResponseType(typeof(Pokemon), 200)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(500)]
         [HttpGet("{name}")]
         public async Task<ActionResult<Pokemon>> GetPokemon(string name)
         {
@@ -27,6 +36,15 @@ namespace Pokedex.API.Controllers
             return StatusCode(response.ErrorCode, response.ErrorMessage);
         }
 
+        /// <summary>
+        /// Returns a specific pokemon information by name with translated description
+        /// </summary>
+        /// <response code="200">Pokemon information returned</response>
+        /// <response code="404">Pokemon not found</response>
+        /// <response code="500">Can't return Pokemon information right now</response>
+        [ProducesResponseType(typeof(Pokemon), 200)]
+        [ProducesResponseType(typeof(string), 404)]
+        [ProducesResponseType(500)]
         [HttpGet("translated/{name}")]
         public async Task<ActionResult<Pokemon>> GetTranslatedPokemon(string name)
         {

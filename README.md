@@ -9,7 +9,6 @@ The api has two endpoints:
 `/{name}` to receive information of the given Pokemon.
 `/translated/{name}` to receive the pokemon with a funny description depending on its habitat.
 
-
 ## Docker
 
 The application is also [dockerised](https://www.docker.com/get-started).
@@ -20,6 +19,8 @@ In order to run a dockerised version of the API, go to the project root folder a
 
 I have tested the app using [Postman](https://www.postman.com/) and [Firefox Browser](https://www.mozilla.org/en-GB/firefox/new/).
 The base url will be <http://localhost> (<http://localhost/pokemon/translated/mewtwo> for example) in the case of the dockerised app, and <http://localhost:5000> or <https://localhost:5001> (<http://localhost:5000/pokemon/translated/mewtwo> for example) running locally.
+
+Alternatively, it can be tested using Swagger. In the web browser, go to <http://localhost:5000/swagger/index.html> or <http://localhost/swagger/index.html> if the app is running using docker
 
 ## Running unit tests
 

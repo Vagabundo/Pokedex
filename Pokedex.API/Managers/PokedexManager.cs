@@ -17,6 +17,10 @@ namespace Pokedex.API.Managers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Returns a specific pokemon information by name
+        /// </summary>
+        /// <param name="name">Pokemon name</param>
         public async Task<Response<Pokemon>> GetPokemonFromNameAsync(string name)
         {
             try
@@ -34,6 +38,10 @@ namespace Pokedex.API.Managers
             }
         }
 
+        /// <summary>
+        /// Returns a specific pokemon information by id
+        /// </summary>
+        /// <param name="id">Pokemon id</param>
         public async Task<Response<Pokemon>> GetPokemonFromIdAsync(int id)
         {
             try 
@@ -58,6 +66,10 @@ namespace Pokedex.API.Managers
             }
         }
 
+        /// <summary>
+        /// Returns a specific pokemon information with tranbspalet description by pokemon name
+        /// </summary>
+        /// <param name="name">Pokemon name</param>
         public async Task<Response<Pokemon>> GetTranslatedPokemonFromNameAsync(string name)
         {
             Response<Pokemon> pokeResponse;
@@ -81,6 +93,10 @@ namespace Pokedex.API.Managers
             return pokeResponse;
         }
 
+        /// <summary>
+        /// Returns whether a pokemon description should be translated using yoda translator
+        /// </summary>
+        /// <param name="poke">Pokemon</param>
         private bool YodaTranslation(Pokemon poke)
         {
             return poke.IsLegendary || poke.Habitat.Equals("cave");

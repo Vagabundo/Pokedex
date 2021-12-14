@@ -13,16 +13,19 @@ namespace Pokedex.API.Clients
             _clientConfig = clientDataConfig;
         }
 
+        /// <inheritdoc />
         public Task<string> GetPokemonInfoFromNameAsync(string name)
         {
             return GetJsonFromUrlAsync(_clientConfig.PokeApiBaseUrl + _clientConfig.PokeApiNameUrl + name);
         }
 
+        /// <inheritdoc />
         public Task<string> GetPokemonInfoFromIdAsync(int id)
         {
             return GetJsonFromUrlAsync(_clientConfig.PokeApiBaseUrl + _clientConfig.PokeApiIdUrl + id);
         }
 
+        /// <inheritdoc />
         public Task<string> GetTranslatedTextAsync(string text, bool yoda)
         {
             var url = _clientConfig.TranslationsApiUrl.Base +
@@ -33,6 +36,10 @@ namespace Pokedex.API.Clients
             return GetJsonFromUrlAsync(url + text);
         }
 
+        /// <summary>
+        /// Returns the response as json from the given url
+        /// </summary>
+        /// <param name="url">url</param>
         private Task<string> GetJsonFromUrlAsync(string url)
         {
             return url.GetJsonFromUrlAsync(webReq =>
