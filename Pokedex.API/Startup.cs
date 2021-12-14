@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Pokedex.API.Clients;
+using Pokedex.API.Data;
 using Pokedex.API.Managers;
 
 namespace Pokedex.API
@@ -21,6 +22,11 @@ namespace Pokedex.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            ClientDataConfig clientDataConfig = new ClientDataConfig();
+            Configuration.GetSection("ClientData").Bind(clientDataConfig);
+            services.AddSingleton(clientDataConfig);
+
             services.AddScoped<IPokemonClient, ServiceStackClient>();
             services.AddScoped<PokemonManager>();
 

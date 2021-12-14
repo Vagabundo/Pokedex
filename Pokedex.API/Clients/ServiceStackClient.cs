@@ -1,44 +1,43 @@
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+using Pokedex.API.Data;
 using ServiceStack;
 
 namespace Pokedex.API.Clients
 {
     public class ServiceStackClient : IPokemonClient
     {
-        private readonly IConfiguration _config;
-        private readonly string apiBaseUrl;
+        private readonly ClientDataConfig _clientConfig;
 
-        public ServiceStackClient(IConfiguration config)
+        public ServiceStackClient(ClientDataConfig clientDataConfig)
         {
-            _config = config;
-            apiBaseUrl = _config.GetValue<string>("HttpConfig:PokeApiBaseUrl");
+            _clientConfig = clientDataConfig;
         }
 
         public Task<string> GetPokemonInfoFromNameAsync(string name)
         {
-            var url = apiBaseUrl + _config.GetValue<string>("HttpConfig:PokeApiNameUrl");
-            return (url+name).GetJsonFromUrlAsync(webReq =>
-                {
-                    webReq.UserAgent = _config.GetValue<string>("HttpConfig:UserAgent");
-                });
+            return GetJsonFromUrlAsync(_clientConfig.PokeApiBaseUrl + _clientConfig.PokeApiNameUrl + name);
         }
 
         public Task<string> GetPokemonInfoFromIdAsync(int id)
         {
-            var url = apiBaseUrl + _config.GetValue<string>("HttpConfig:PokeApiIdUrl");
-            return (url+id).GetJsonFromUrlAsync(webReq =>
-                {
-                    webReq.UserAgent = _config.GetValue<string>("HttpConfig:UserAgent");
-                });
+            return GetJsonFromUrlAsync(_clientConfig.PokeApiBaseUrl + _clientConfig.PokeApiIdUrl + id);
         }
 
-        public Task<string> GetTranslatedTextAsync(string text)
+        public Task<string> GetTranslatedTextAsync(string text, bool yoda)
         {
-            var url = _config.GetValue<string>("HttpConfig:YodaTranslationApiUrl");
-            return (url+text).GetJsonFromUrlAsync(webReq =>
+            var url = _clientConfig.TranslationsApiUrl.Base +
+                    (yoda ? _clientConfig.TranslationsApiUrl.Yoda :
+                    _clientConfig.TranslationsApiUrl.Shakespeare) + 
+                    _clientConfig.TranslationsApiUrl.End;
+
+            return GetJsonFromUrlAsync(url + text);
+        }
+
+        private Task<string> GetJsonFromUrlAsync(string url)
+        {
+            return url.GetJsonFromUrlAsync(webReq =>
                 {
-                    webReq.UserAgent = _config.GetValue<string>("HttpConfig:UserAgent");
+                    webReq.UserAgent = _clientConfig.UserAgent;
                 });
         }
     }

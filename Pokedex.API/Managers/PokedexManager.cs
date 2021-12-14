@@ -22,7 +22,6 @@ namespace Pokedex.API.Managers
             try
             {
                 string response = await _client.GetPokemonInfoFromNameAsync(name);  
-
                 return await GetPokemonFromIdAsync(JsonHelper.GetPokemonId(response));
             }
             catch (Exception ex) 
@@ -41,7 +40,8 @@ namespace Pokedex.API.Managers
             {
                 string response = await _client.GetPokemonInfoFromIdAsync(id);
                 
-                return new Response<Pokemon>(new Pokemon {
+                return new Response<Pokemon>(new Pokemon 
+                {
                     Name = JsonHelper.GetPokemonName(response),
                     Description = JsonHelper.GetPokemonDescription(response),
                     Habitat = JsonHelper.GetPokemonHabitat(response),
@@ -60,27 +60,30 @@ namespace Pokedex.API.Managers
 
         public async Task<Response<Pokemon>> GetTranslatedPokemonFromNameAsync(string name)
         {
-            try
+            Response<Pokemon> pokeResponse;
+            Task<string> response;
+
+            pokeResponse = await GetPokemonFromNameAsync(name);
+            if(pokeResponse.Body != null)
             {
-                Response<Pokemon> poke = await GetPokemonFromNameAsync(name);
-                if(poke.Body == null)
-                {
-                    return poke;
+                try 
+                {      
+                    response = _client.GetTranslatedTextAsync(pokeResponse.Body.Description, YodaTranslation(pokeResponse.Body));
+                    pokeResponse.Body.Description = JsonHelper.GetPokemonTranslatedDescription(await response);
                 }
-
-                string response = await _client.GetTranslatedTextAsync(poke.Body.Description);
-                poke.Body.Description = JsonHelper.GetPokemonTranslatedDescription(response);
-
-                return poke;
+                catch (Exception ex)
+                {
+                    _logger.Log(LogLevel.Warning, ex.Message);
+                    return pokeResponse;
+                }
             }
-            catch (Exception ex) 
-            {
-                if (ex.GetStatus() != null)
-                    return new Response<Pokemon>(((int)ex.GetStatus()), ex.GetResponseBody());
 
-                _logger.Log(LogLevel.Error, ex.Message);
-                return new Response<Pokemon>(500, "Internal Error");
-            }
+            return pokeResponse;
+        }
+
+        private bool YodaTranslation(Pokemon poke)
+        {
+            return poke.IsLegendary || poke.Habitat.Equals("cave");
         }
     }
 }

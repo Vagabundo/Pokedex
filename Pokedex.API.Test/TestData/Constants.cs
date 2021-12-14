@@ -4,20 +4,26 @@ namespace Pokedex.API.Test.Data
 {
     public static class Constants
     {
-        public static int PokemonId = 1;
-
-        public static Pokemon FakePokemon = new Pokemon {
-            Name = "testemon",
-            Description = "This is a test pokemon description.",
-            Habitat = "testiland",
-            IsLegendary = true
+        public static ClientDataConfig FakeClientConfig = new ClientDataConfig
+        {
+            PokeApiBaseUrl = "http://test.test/",
+            PokeApiIdUrl = "test/",
+            PokeApiNameUrl = "test/",
+            TranslationsApiUrl = new TranslationsApiUrl
+            {
+                Base = "http://test.test/",
+                Yoda = "test/",
+                Shakespeare = "test/",
+                End = "test"
+            },
+            UserAgent = "test-agent"
         };
 
-        public static string FakePokemonJson = 
-        "{\"flavor_text_entries\":[{\"flavor_text\":\"This\\nis\\ra\\ftest\\tpokemon\\bdescription.\","+
-        "\"language\":{\"name\":\"en\",\"url\":\"https:\\/\\/pokeapi.co\\/api\\/v2\\/language\\/9\\/\"},\"version\":{\"name\":\"red\",\"url\":\"https:\\/\\/pokeapi.co\\/api\\/v2\\/version\\/1\\/\"}}],"+
-        "\"habitat\":{\"name\":\"" + FakePokemon.Habitat + "\",\"url\":\"https:\\/\\/pokeapi.co\\/api\\/v2\\/pokemon-habitat\\/5\\/\"},\"id\":" + PokemonId + ",\"is_baby\":false,"+
-        "\"is_legendary\":" + FakePokemon.IsLegendary.ToString().ToLower() + ",\"is_mythical\":false,\"name\":\"" + FakePokemon.Name + "\"}";
+        public static int PokemonId = 1;
+
+        public static Pokemon FakePokemon = Utils.PokemonBuilder();
+
+        public static string FakePokemonJson = Utils.PokemonJsonBuilder(FakePokemon, 1);
 
         public static string FakeTranslationJson = 
         "{\"success\":{\"total\":1},\"contents\":{\"translated\":\"A test pokemon description,  this is.\",\"text\":\"This is a test pokemon description.\",\"translation\":\"yoda\"}}";

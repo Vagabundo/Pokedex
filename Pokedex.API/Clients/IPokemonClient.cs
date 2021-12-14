@@ -6,6 +6,6 @@ namespace Pokedex.API.Clients
     {
         Task<string> GetPokemonInfoFromNameAsync(string name);
         Task<string> GetPokemonInfoFromIdAsync(int id);
-        Task<string> GetTranslatedTextAsync(string text);
+        Task<string> GetTranslatedTextAsync(string text, bool yoda);
     }
 }

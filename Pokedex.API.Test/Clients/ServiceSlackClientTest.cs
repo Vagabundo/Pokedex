@@ -1,8 +1,6 @@
 using NUnit.Framework;
 using Pokedex.API.Clients;
 using ServiceStack;
-using Moq;
-using Microsoft.Extensions.Configuration;
 using static Pokedex.API.Test.Data.Constants;
 
 namespace Pokedex.API.Test.Clients
@@ -11,18 +9,11 @@ namespace Pokedex.API.Test.Clients
     public class ServiceStackClientTest
     {
         private ServiceStackClient client;
-        private Mock<IConfigurationSection> mockSection;
-        private Mock<IConfiguration> configuration;
 
         [SetUp]
         public void Setup()
-        {
-            mockSection = new Mock<IConfigurationSection>();
-            configuration = new Mock<IConfiguration>();
-            mockSection.Setup(x=>x.Value).Returns("http://test.test/");
-            configuration.Setup(c => c.GetSection(It.IsAny<string>())).Returns(mockSection.Object);
-            
-            client = new ServiceStackClient(configuration.Object);
+        {       
+            client = new ServiceStackClient(FakeClientConfig);
         }
 
         [Test]
@@ -30,7 +21,7 @@ namespace Pokedex.API.Test.Clients
         {
             using (new HttpResultsFilter{ StringResult = FakePokemonFromNameJson })
             {
-                Assert.That(client.GetPokemonInfoFromNameAsync("test").Result == FakePokemonFromNameJson);
+                Assert.That(client.GetPokemonInfoFromNameAsync(FakePokemon.Name).Result == FakePokemonFromNameJson);
             }
         }
 
@@ -44,12 +35,12 @@ namespace Pokedex.API.Test.Clients
         }
 
         [Test]
-        public void GetTranslatedTextAsync_UsesServiceStackHttpClientAndReturnsExpectedJson()
+        public void GetTranslatedTextAsync_UsesServiceStackHttpClientAndReturnsTranslatedDescription()
         {
             using (new HttpResultsFilter{ StringResult = FakeTranslationJson })
             {
-                Assert.That(client.GetTranslatedTextAsync("testing http client").Result == FakeTranslationJson);
+                Assert.That(client.GetTranslatedTextAsync(FakePokemon.Description, true).Result == FakeTranslationJson);
             }
         }
-    }   
+    }
 }
