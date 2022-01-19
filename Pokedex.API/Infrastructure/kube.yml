@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pokedex-api
+spec:
+  selector:
+    matchLabels:
+      app: pokedex-api
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: pokedex-api
+    spec:
+      containers:
+        - name: pokedex-api
+          image: vagabundocker/pokedex.api
+          # env:
+          # - name: MY_VAR
+          #   value: "roberto"
+          resources:
+            # requests:
+            #   memory: "64Mi"
+            #   cpu: "200m"
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          # readinessProbe:
+          #   httpGet:
+          #     path: /pokemon/bulbasaur
+          #     port: 80
+          #   initialDelaySeconds: 5
+          #   periodSeconds: 10
+          # livenessProbe:
+          #   tcpSocket:
+          #     port: 80
+          #   initialDelaySeconds: 15
+          #   periodSeconds: 20
+          ports:
+          - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pokedex-api-service
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: pokedex-api
