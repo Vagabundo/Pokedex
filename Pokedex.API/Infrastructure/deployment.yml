@@ -27,7 +27,7 @@ spec:
               cpu: "500m"
           # readinessProbe:
           #   httpGet:
-          #     path: /pokemon/bulbasaur
+          #     path: /health
           #     port: 80
           #   initialDelaySeconds: 5
           #   periodSeconds: 10

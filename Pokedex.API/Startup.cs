@@ -22,6 +22,7 @@ namespace Pokedex.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddHealthChecks();
 
             ClientDataConfig clientDataConfig = new ClientDataConfig();
             Configuration.GetSection("ClientData").Bind(clientDataConfig);
@@ -78,6 +79,7 @@ namespace Pokedex.API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHealthChecks("/health");
             });
         }
     }
