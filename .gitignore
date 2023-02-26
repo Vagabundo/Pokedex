@@ -434,9 +434,8 @@ $RECYCLE.BIN/
 
 # Terraform
 *.hcl
+*.tfvars
 .terraform/
 
 # Variety
 *.7z
-
-
