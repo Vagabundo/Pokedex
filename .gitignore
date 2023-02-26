@@ -431,3 +431,12 @@ $RECYCLE.BIN/
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Terraform
+*.hcl
+.terraform/
+
+# Variety
+*.7z
+
+
