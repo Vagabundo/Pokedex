@@ -1,3 +1,5 @@
+The main purpose of this project was to play around with AWS, Terraform, Docker and Kubernetes from scratch. Some unit tests as a bonus.
+
 # Pokedex
 
 This project was coded with [VS Code](https://code.visualstudio.com/) version 1.63.0 and [.Net Core](https://dotnet.microsoft.com/en-us/download/dotnet/3.1) version 3.1.413
